@@ -6,6 +6,8 @@ import Landing from "./pages/landing/Landing";
 import Dashboard from "./pages/dashboard/Dashboard";
 import RequestResetPassword from "./pages/auth/RequestResetPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import Skills from "./pages/skills/Skills";
+import AddSkill from "./pages/skills/AddSkill";
 
 const App = () => {
   return (
@@ -23,6 +25,9 @@ const App = () => {
 
         {/* protected routes */}
         <Route path="/dashboard" element={<Dashboard />} />
+
+        <Route path="/skills" element={<Skills />} />
+        <Route path="/skills/add" element={<AddSkill />} />
       </Routes>
     </>
   );

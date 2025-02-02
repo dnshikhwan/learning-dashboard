@@ -134,6 +134,7 @@ export const signIn = async (
 
     const accessToken = jwt.sign(
       {
+        id: user.id,
         username: user.username,
         email: user.email,
       },

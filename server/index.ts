@@ -3,6 +3,7 @@ import compression from "compression";
 import dotenv from "dotenv";
 import cors from "cors";
 
+import "./interfaces/express.interface";
 import { createRouter } from "./router";
 import { logger } from "./helpers/log.helper";
 import { requestLogger } from "./middlewares/request.middleware";

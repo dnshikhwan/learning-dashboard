@@ -53,10 +53,16 @@ export const APP_MESSAGE = {
   emailDuplicated: "User with this email address already exists.",
   invalidCredentials: "Invalid email or password.",
   invalidToken: "Invalid or expired token.",
+  userUnauthorized:
+    "User is not authorized. Please log in to access this resources.",
 
   userLoggedIn: "User successfully logged in.",
   userRegistered: "User successfully registered.",
   passwordResetEmail:
     "If an account exists with this email, you will receive a reset link.",
   passwordResetSuccessful: "Password successfully reset.",
+
+  skillSaved: "Skill added successfully.",
+  skillNotFound: "Skill not found.",
+  skillDeleted: "Skill deleted successfully.",
 };

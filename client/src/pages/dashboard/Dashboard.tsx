@@ -1,5 +1,13 @@
+import Layout from "../../components/Layout";
+
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return (
+    <>
+      <Layout>
+        <p>hello</p>
+      </Layout>
+    </>
+  );
 };
 
 export default Dashboard;
