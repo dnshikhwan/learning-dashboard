@@ -134,6 +134,11 @@ export const getSkillsById = async (
       [user.id, id]
     );
 
+    const resources = await client.query(
+      "select * from resources where skill_id = $1",
+      [id]
+    );
+
     if (skill.rows.length === 0) {
       return sendResponse(
         res,
@@ -146,6 +151,7 @@ export const getSkillsById = async (
     return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
       data: {
         skill: skill.rows[0],
+        resources: resources.rows,
       },
     });
   } catch (err) {

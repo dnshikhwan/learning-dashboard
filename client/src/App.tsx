@@ -9,6 +9,9 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Skills from "./pages/skills/Skills";
 import AddSkill from "./pages/skills/AddSkill";
 import EditSkill from "./pages/skills/EditSkill";
+import Skill from "./pages/skills/Skill";
+import Resources from "./pages/resources/Resources";
+import AddResource from "./pages/resources/AddResource";
 
 const App = () => {
   return (
@@ -27,9 +30,13 @@ const App = () => {
         {/* protected routes */}
         <Route path="/dashboard" element={<Dashboard />} />
 
+        <Route path="/skills/:id" element={<Skill />} />
         <Route path="/skills" element={<Skills />} />
         <Route path="/skills/add" element={<AddSkill />} />
         <Route path="/skills/edit/:id" element={<EditSkill />} />
+
+        <Route path="/resources" element={<Resources />} />
+        <Route path="/resources/add" element={<AddResource />} />
       </Routes>
     </>
   );

@@ -130,8 +130,8 @@ const Skills = () => {
                   <tbody className="divide-y divide-gray-200">
                     {skills.map((skill) => (
                       <tr key={skill.id}>
-                        <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                          {skill.name}
+                        <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-blue-900 hover:underline sm:pl-0">
+                          <Link to={`/skills/${skill.id}`}>{skill.name}</Link>
                         </td>
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                           {skill.description}

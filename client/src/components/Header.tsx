@@ -19,7 +19,7 @@ const user = {
 const navigation = [
   { name: "Dashboard", to: "/dashboard" },
   { name: "Skills", to: "/skills" },
-  { name: "Resources", to: "#" },
+  { name: "Resources", to: "/resources" },
   { name: "Reports", to: "#" },
 ];
 const userNavigation = [
@@ -60,7 +60,7 @@ const Header = () => {
                         key={item.name}
                         to={item.to}
                         className={classNames(
-                          location.pathname === item.to
+                          currentPath?.to === item.to
                             ? "bg-gray-900 text-white"
                             : "text-gray-300 hover:bg-gray-700 hover:text-white",
                           "rounded-md px-3 py-2 text-sm font-medium"
@@ -141,7 +141,7 @@ const Header = () => {
                 as="a"
                 href={item.to}
                 className={classNames(
-                  location.pathname === item.to
+                  currentPath?.to === item.to
                     ? "bg-gray-900 text-white"
                     : "text-gray-300 hover:bg-gray-700 hover:text-white",
                   "block rounded-md px-3 py-2 text-base font-medium"
