@@ -58,6 +58,26 @@ const Resources = () => {
     fetchSkills();
   }, []);
 
+  const handleDeleteResource = async (e: React.FormEvent, id: string) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosConfig.delete(`/resources/${id}`);
+      console.log(response.data);
+      toast.success(response.data.message);
+      setResources(
+        resources.filter((resource) => {
+          return resource.id !== id;
+        })
+      );
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data.message);
+        console.log(err.response?.data);
+      }
+    }
+  };
+
   const filteredResource = resources.filter((resource) => {
     return resource.skill_name === filter;
   });
@@ -204,7 +224,12 @@ const Resources = () => {
                               </Link>
                             </td>
                             <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                              <button className="text-red-600 hover:cursor-pointer hover:text-red-900">
+                              <button
+                                onClick={(e) =>
+                                  handleDeleteResource(e, resource.id)
+                                }
+                                className="text-red-600 hover:cursor-pointer hover:text-red-900"
+                              >
                                 Delete
                                 <span className="sr-only">
                                   , {resource.title}
@@ -250,7 +275,12 @@ const Resources = () => {
                               </Link>
                             </td>
                             <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                              <button className="text-red-600 hover:cursor-pointer hover:text-red-900">
+                              <button
+                                onClick={(e) =>
+                                  handleDeleteResource(e, resource.id)
+                                }
+                                className="text-red-600 hover:cursor-pointer hover:text-red-900"
+                              >
                                 Delete
                                 <span className="sr-only">
                                   , {resource.title}

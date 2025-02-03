@@ -1,5 +1,5 @@
 export interface IResource {
-  id: number;
+  id: string;
   skill_id: number;
   user_id: number;
   title: string;
