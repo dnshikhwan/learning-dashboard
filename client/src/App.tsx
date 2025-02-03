@@ -8,6 +8,7 @@ import RequestResetPassword from "./pages/auth/RequestResetPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Skills from "./pages/skills/Skills";
 import AddSkill from "./pages/skills/AddSkill";
+import EditSkill from "./pages/skills/EditSkill";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
 
         <Route path="/skills" element={<Skills />} />
         <Route path="/skills/add" element={<AddSkill />} />
+        <Route path="/skills/edit/:id" element={<EditSkill />} />
       </Routes>
     </>
   );

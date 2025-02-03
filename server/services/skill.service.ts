@@ -43,7 +43,59 @@ export const addSkill = async (
   }
 };
 
-// TODO: update skills
+export const updateSkill = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+    const { name, description, target_date, status } = req.body;
+
+    if (!name || !description || !target_date || !status) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.BAD_REQUEST,
+        APP_MESSAGE.missingRequiredField
+      );
+    }
+
+    const skillQuery = await client.query(
+      "select * from skills where user_id = $1 and id = $2",
+      [user.id, id]
+    );
+
+    if (skillQuery.rows.length === 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.NOT_FOUND,
+        APP_MESSAGE.skillNotFound
+      );
+    }
+
+    const updatedSkill = await client.query(
+      "update skills set name = $1, description = $2, target_date = $3, status = $4 where user_id = $5 and id = $6 returning *",
+      [name, description, target_date, status, user.id, id]
+    );
+
+    return sendResponse(
+      res,
+      false,
+      HTTP_RESPONSE_CODE.OK,
+      APP_MESSAGE.skilLEdited,
+      {
+        data: {
+          skill: updatedSkill,
+        },
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getSkills = async (
   req: Request,

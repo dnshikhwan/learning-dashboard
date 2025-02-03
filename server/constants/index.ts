@@ -65,4 +65,5 @@ export const APP_MESSAGE = {
   skillSaved: "Skill added successfully.",
   skillNotFound: "Skill not found.",
   skillDeleted: "Skill deleted successfully.",
+  skilLEdited: "Skill updated successfully.",
 };

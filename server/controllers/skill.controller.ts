@@ -4,6 +4,7 @@ import {
   deleteSkill,
   getSkills,
   getSkillsById,
+  updateSkill,
 } from "../services/skill.service";
 import { authMiddleware } from "../middlewares/auth.middleware";
 
@@ -13,6 +14,7 @@ export const skillController = () => {
   router.get("/", authMiddleware, getSkills);
   router.get("/:id", authMiddleware, getSkillsById);
   router.delete("/:id", authMiddleware, deleteSkill);
+  router.put("/:id", authMiddleware, updateSkill);
   router.post("/add", authMiddleware, addSkill);
 
   return router;

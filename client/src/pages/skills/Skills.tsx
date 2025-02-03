@@ -152,13 +152,13 @@ const Skills = () => {
                           {format(new Date(skill.created_at), "dd/MM/yyyy")}
                         </td>
                         <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                          <a
-                            href="#"
+                          <Link
+                            to={`/skills/edit/${skill.id}`}
                             className="text-indigo-600 hover:text-indigo-900"
                           >
                             Edit
                             <span className="sr-only">, {skill.name}</span>
-                          </a>
+                          </Link>
                         </td>
                         <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                           <button
