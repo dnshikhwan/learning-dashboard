@@ -123,7 +123,10 @@ const Skill = () => {
                         {goal.description}
                       </strong>{" "}
                     </span>
-                    <Link className="text-indigo-600" to={""}>
+                    <Link
+                      className="text-indigo-600"
+                      to={`/goals/edit/${goal.id}`}
+                    >
                       Edit
                     </Link>
                     <button

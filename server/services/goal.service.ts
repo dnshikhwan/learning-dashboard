@@ -43,7 +43,73 @@ export const addGoal = async (
   }
 };
 
-// TODO: edit goal
+export const editGoal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { skill_id, description, target_date, status } = req.body;
+    const user = req.user as IUser;
+    const { id } = req.params;
+
+    if (!skill_id || !description || !target_date || !status) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.BAD_REQUEST,
+        APP_MESSAGE.missingRequiredField
+      );
+    }
+
+    await client.query(
+      "update goals set description = $1, skill_id = $2, target_date = $3, status = $4 where id = $5 and user_id = $6",
+      [description, skill_id, target_date, status, id, user.id]
+    );
+
+    return sendResponse(
+      res,
+      true,
+      HTTP_RESPONSE_CODE.OK,
+      APP_MESSAGE.goalEdited
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getGoalById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+
+    const goal = await client.query(
+      "select * from goals where id = $1 and user_id = $2",
+      [id, user.id]
+    );
+
+    if (goal.rows.length === 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.NOT_FOUND,
+        APP_MESSAGE.goalNotFound
+      );
+    }
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        goal: goal.rows,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getGoalsBySkill = async (
   req: Request,

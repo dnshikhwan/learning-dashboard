@@ -14,6 +14,7 @@ import Resources from "./pages/resources/Resources";
 import AddResource from "./pages/resources/AddResource";
 import EditResource from "./pages/resources/EditResource";
 import AddGoal from "./pages/goals/AddGoal";
+import EditGoal from "./pages/goals/EditGoal";
 
 const App = () => {
   return (
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/resources/edit/:id" element={<EditResource />} />
 
         <Route path="/goals/add" element={<AddGoal />} />
+        <Route path="/goals/edit/:id" element={<EditGoal />} />
       </Routes>
     </>
   );

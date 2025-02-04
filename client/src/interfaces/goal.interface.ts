@@ -3,7 +3,7 @@ export interface IGoal {
   skill_id: string;
   user_id: number;
   description: string;
-  target_date: Date;
+  target_date: string;
   status: string;
   created_at: Date;
   updated_at: Date;
