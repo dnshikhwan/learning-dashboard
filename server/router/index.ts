@@ -5,6 +5,7 @@ import { skillController } from "../controllers/skill.controller";
 import { resourceController } from "../controllers/resource.controller";
 import { profileController } from "../controllers/profile.controller";
 import { goalController } from "../controllers/goal.controller";
+import { progressController } from "../controllers/progress.controller";
 
 export const createRouter = () => {
   const router = Router();
@@ -15,6 +16,7 @@ export const createRouter = () => {
   router.use("/resources", resourceController());
   router.use("/profile", profileController());
   router.use("/goals", goalController());
+  router.use("/progress", progressController());
 
   return router;
 };

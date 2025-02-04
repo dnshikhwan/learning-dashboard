@@ -197,3 +197,49 @@ export const deleteSkill = async (
     next(err);
   }
 };
+
+export const getLearningSkill = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user as IUser;
+
+    const learningSkill = await client.query(
+      "select * from skills where user_id = $1 and status = 'In Progress'",
+      [user.id]
+    );
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        skill: learningSkill.rows,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCompletedSkill = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user as IUser;
+
+    const completedSkill = await client.query(
+      "select * from skills where user_id = $1 and status = 'Completed'",
+      [user.id]
+    );
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        skill: completedSkill.rows,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};

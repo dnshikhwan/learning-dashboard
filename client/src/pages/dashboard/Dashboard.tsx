@@ -3,46 +3,38 @@ import Layout from "../../components/Layout";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { axiosConfig } from "../../axiosConfig";
-import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/20/solid";
 import {
-  CursorArrowRaysIcon,
-  EnvelopeOpenIcon,
-  UsersIcon,
+  BookOpenIcon,
+  CheckIcon,
+  ClockIcon,
 } from "@heroicons/react/24/outline";
-
-const stats = [
-  {
-    id: 1,
-    name: "Total Subscribers",
-    stat: "71,897",
-    icon: UsersIcon,
-    change: "122",
-    changeType: "increase",
-  },
-  {
-    id: 2,
-    name: "Avg. Open Rate",
-    stat: "58.16%",
-    icon: EnvelopeOpenIcon,
-    change: "5.4%",
-    changeType: "increase",
-  },
-  {
-    id: 3,
-    name: "Avg. Click Rate",
-    stat: "24.57%",
-    icon: CursorArrowRaysIcon,
-    change: "3.2%",
-    changeType: "decrease",
-  },
-];
-
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
 
 const Dashboard = () => {
   const [username, setUsername] = useState("");
+  const [learningSkillCount, setLearningSkillCount] = useState(0);
+  const [completedSkillCount, setCompletedSkillCount] = useState(0);
+  const [totalTimeSpent, setTotalTimeSpent] = useState(0);
+
+  const stats = [
+    {
+      id: 1,
+      name: "Time spent learning",
+      stat: `${(totalTimeSpent / 60).toFixed(2)} hours`,
+      icon: ClockIcon,
+    },
+    {
+      id: 2,
+      name: "Learning skills",
+      stat: learningSkillCount,
+      icon: BookOpenIcon,
+    },
+    {
+      id: 3,
+      name: "Completed skills",
+      stat: completedSkillCount,
+      icon: CheckIcon,
+    },
+  ];
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -63,6 +55,54 @@ const Dashboard = () => {
 
     fetchCurrentUser();
   }, []);
+
+  useEffect(() => {
+    const fetchLearningSkills = async () => {
+      try {
+        const response = await axiosConfig.get("/skills/learning");
+        setLearningSkillCount(response.data.details.data.skill.length);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data.message);
+          console.log(err.response?.data);
+        }
+      }
+    };
+
+    fetchLearningSkills();
+  });
+
+  useEffect(() => {
+    const fetchCompletedSkills = async () => {
+      try {
+        const response = await axiosConfig.get("/skills/completed");
+        setCompletedSkillCount(response.data.details.data.skill.length);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data.message);
+          console.log(err.response?.data);
+        }
+      }
+    };
+
+    fetchCompletedSkills();
+  });
+
+  useEffect(() => {
+    const fetchTimeSpent = async () => {
+      try {
+        const response = await axiosConfig.get("/progress/time-spent");
+        setTotalTimeSpent(response.data.details.data.total_time_spent);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data.message);
+          console.log(err.response?.data);
+        }
+      }
+    };
+
+    fetchTimeSpent();
+  });
 
   return (
     <>
@@ -95,46 +135,6 @@ const Dashboard = () => {
                   <p className="text-2xl font-semibold text-gray-900">
                     {item.stat}
                   </p>
-                  <p
-                    className={classNames(
-                      item.changeType === "increase"
-                        ? "text-green-600"
-                        : "text-red-600",
-                      "ml-2 flex items-baseline text-sm font-semibold"
-                    )}
-                  >
-                    {item.changeType === "increase" ? (
-                      <ArrowUpIcon
-                        aria-hidden="true"
-                        className="size-5 shrink-0 self-center text-green-500"
-                      />
-                    ) : (
-                      <ArrowDownIcon
-                        aria-hidden="true"
-                        className="size-5 shrink-0 self-center text-red-500"
-                      />
-                    )}
-
-                    <span className="sr-only">
-                      {" "}
-                      {item.changeType === "increase"
-                        ? "Increased"
-                        : "Decreased"}{" "}
-                      by{" "}
-                    </span>
-                    {item.change}
-                  </p>
-                  <div className="absolute inset-x-0 bottom-0 bg-gray-50 px-4 py-4 sm:px-6">
-                    <div className="text-sm">
-                      <a
-                        href="#"
-                        className="font-medium text-indigo-600 hover:text-indigo-500"
-                      >
-                        View all
-                        <span className="sr-only"> {item.name} stats</span>
-                      </a>
-                    </div>
-                  </div>
                 </dd>
               </div>
             ))}
