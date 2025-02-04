@@ -12,6 +12,7 @@ import EditSkill from "./pages/skills/EditSkill";
 import Skill from "./pages/skills/Skill";
 import Resources from "./pages/resources/Resources";
 import AddResource from "./pages/resources/AddResource";
+import EditResource from "./pages/resources/EditResource";
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
 
         <Route path="/resources" element={<Resources />} />
         <Route path="/resources/add" element={<AddResource />} />
+        <Route path="/resources/edit/:id" element={<EditResource />} />
       </Routes>
     </>
   );

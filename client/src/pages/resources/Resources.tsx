@@ -214,7 +214,7 @@ const Resources = () => {
                             <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500"></td>
                             <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                               <Link
-                                to={`/skills/edit/`}
+                                to={`/resources/edit/${resource.id}`}
                                 className="text-indigo-600 hover:text-indigo-900"
                               >
                                 Edit
@@ -265,7 +265,7 @@ const Resources = () => {
                             <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500"></td>
                             <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                               <Link
-                                to={`/skills/edit/`}
+                                to={`/resources/edit/${resource.id}`}
                                 className="text-indigo-600 hover:text-indigo-900"
                               >
                                 Edit

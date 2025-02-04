@@ -64,7 +64,79 @@ export const getResources = async (
   }
 };
 
-// TODO: update resource
+export const getResourceById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+
+    const resource = await client.query(
+      "select * from resources where id = $1 and user_id = $2",
+      [id, user.id]
+    );
+
+    if (resource.rows.length === 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.NOT_FOUND,
+        APP_MESSAGE.resourceNotFound
+      );
+    }
+
+    const skill = await client.query(
+      "select * from skills where id = $1 and user_id = $2",
+      [resource.rows[0].skill_id, user.id]
+    );
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        resource: resource.rows,
+        skill: skill.rows,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateResource = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+    const { title, url, skill_id, type, status } = req.body;
+
+    if (!title || !url || !skill_id || !type || !status) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.BAD_REQUEST,
+        APP_MESSAGE.missingRequiredField
+      );
+    }
+
+    await client.query(
+      "update resources set title = $1, url = $2, skill_id = $3, type = $4, status = $5 where id = $6 and user_id = $7",
+      [title, url, skill_id, type, status, id, user.id]
+    );
+
+    return sendResponse(
+      res,
+      true,
+      HTTP_RESPONSE_CODE.OK,
+      APP_MESSAGE.resourceEdited
+    );
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const deleteResource = async (
   req: Request,

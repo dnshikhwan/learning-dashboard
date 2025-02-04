@@ -70,4 +70,5 @@ export const APP_MESSAGE = {
   resourceSaved: "Resource added successfully.",
   resourceNotFound: "Resource not found.",
   resourceDeleted: "Resource deleted successfully.",
+  resourceEdited: "Resource edited successfully.",
 };
