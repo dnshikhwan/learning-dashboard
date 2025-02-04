@@ -1,17 +1,19 @@
 import Layout from "../../components/Layout";
 import { useEffect, useState } from "react";
 import { ISkills } from "../../interfaces/skill.interface";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { axiosConfig } from "../../axiosConfig";
 import { differenceInDays, format } from "date-fns";
 import { IResource } from "../../interfaces/resource.interface";
-import { LinkIcon } from "@heroicons/react/24/outline";
+import { LinkIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { IGoal } from "../../interfaces/goal.interface";
 
 const Skill = () => {
   const [skill, setSkill] = useState<ISkills | undefined>();
   const [resources, setResources] = useState<IResource[]>([]);
+  const [goals, setGoals] = useState<IGoal[]>([]);
   const { id } = useParams();
 
   useEffect(() => {
@@ -31,6 +33,39 @@ const Skill = () => {
 
     fetchSkill();
   }, [id]);
+
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await axiosConfig.get(`/goals/${id}`);
+        setGoals(response.data.details.data.goals);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data.message);
+          console.log(err.response?.data);
+        }
+      }
+    };
+    fetchGoals();
+  }, [id]);
+
+  const handleDeleteGoal = async (e: React.FormEvent, id: number) => {
+    e.preventDefault();
+    try {
+      const response = await axiosConfig.delete(`/goals/${id}`);
+      console.log(response);
+      setGoals(
+        goals.filter((goal) => {
+          return goal.id !== id;
+        })
+      );
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data.message);
+        console.log(err.response?.data);
+      }
+    }
+  };
 
   const daysRemaining = skill?.target_date
     ? differenceInDays(new Date(skill.target_date), new Date())
@@ -66,10 +101,51 @@ const Skill = () => {
             </div>
             <p className="mt-6 text-xl/8">{skill?.description}</p>
             <div className="mt-10 max-w-2xl">
-              <p className="font-semibold">Resources</p>
+              <div className="flex justify-between items-center">
+                <p className="font-semibold">Goals</p>
+                <Link to={"/goals/add"} className="text-indigo-600">
+                  Add goal
+                </Link>
+              </div>
+              <ul role="list" className="mt-2 max-w-xl space-y-8 text-gray-600">
+                {goals.map((goal) => (
+                  <li key={goal.id} className="flex gap-x-3">
+                    <SparklesIcon
+                      aria-hidden="true"
+                      className="mt-1 size-5 flex-none text-yellow-600"
+                    />
+                    <span>
+                      <strong
+                        className={`font-semibold text-gray-900 ${
+                          goal.status === "Completed" ? "line-through" : ""
+                        }`}
+                      >
+                        {goal.description}
+                      </strong>{" "}
+                    </span>
+                    <Link className="text-indigo-600" to={""}>
+                      Edit
+                    </Link>
+                    <button
+                      className="text-red-600 hover:cursor-pointer"
+                      onClick={(e) => handleDeleteGoal(e, goal.id)}
+                    >
+                      Delete
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-10 max-w-2xl">
+              <div className="flex justify-between items-center	">
+                <p className="font-semibold">Resources</p>
+                <Link to={"/resources/add"} className="text-indigo-600">
+                  Add resource
+                </Link>
+              </div>
               <ul role="list" className="mt-2 max-w-xl space-y-8 text-gray-600">
                 {resources.map((resource) => (
-                  <li className="flex gap-x-3">
+                  <li key={resource.id} className="flex gap-x-3">
                     <LinkIcon
                       aria-hidden="true"
                       className="mt-1 size-5 flex-none text-indigo-600"

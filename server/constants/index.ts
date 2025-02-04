@@ -75,4 +75,5 @@ export const APP_MESSAGE = {
 
   goalSaved: "Goal added successfully.",
   goalNotFound: "Goal not found.",
+  goalDeleted: "Goal deleted successfully.",
 };

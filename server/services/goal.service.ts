@@ -78,4 +78,41 @@ export const getGoalsBySkill = async (
   }
 };
 
-// TODO delete goal
+export const deleteGoal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+
+    const goal = await client.query(
+      "select * from goals where id = $1 and user_id = $2",
+      [id, user.id]
+    );
+
+    if (goal.rows.length === 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.NOT_FOUND,
+        APP_MESSAGE.goalNotFound
+      );
+    }
+
+    await client.query("delete from goals where id = $1 and user_id = $2", [
+      id,
+      user.id,
+    ]);
+
+    return sendResponse(
+      res,
+      true,
+      HTTP_RESPONSE_CODE.OK,
+      APP_MESSAGE.goalDeleted
+    );
+  } catch (err) {
+    next(err);
+  }
+};

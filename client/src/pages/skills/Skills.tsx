@@ -134,7 +134,9 @@ const Skills = () => {
                           <Link to={`/skills/${skill.id}`}>{skill.name}</Link>
                         </td>
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                          {skill.description}
+                          {skill.description.length > 50
+                            ? skill.description.substring(0, 50) + "..."
+                            : skill.description}
                         </td>
                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                           {format(new Date(skill.target_date), "dd/MM/yyyy")}
