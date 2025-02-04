@@ -67,7 +67,7 @@ const Skill = () => {
             <p className="mt-6 text-xl/8">{skill?.description}</p>
             <div className="mt-10 max-w-2xl">
               <p className="font-semibold">Resources</p>
-              <ul role="list" className="mt-8 max-w-xl space-y-8 text-gray-600">
+              <ul role="list" className="mt-2 max-w-xl space-y-8 text-gray-600">
                 {resources.map((resource) => (
                   <li className="flex gap-x-3">
                     <LinkIcon

@@ -3,6 +3,8 @@ import { testController } from "../controllers/test.controller";
 import { authController } from "../controllers/auth.controller";
 import { skillController } from "../controllers/skill.controller";
 import { resourceController } from "../controllers/resource.controller";
+import { profileController } from "../controllers/profile.controller";
+import { goalController } from "../controllers/goal.controller";
 
 export const createRouter = () => {
   const router = Router();
@@ -11,6 +13,8 @@ export const createRouter = () => {
   router.use("/auth", authController());
   router.use("/skills", skillController());
   router.use("/resources", resourceController());
+  router.use("/profile", profileController());
+  router.use("/goals", goalController());
 
   return router;
 };

@@ -61,6 +61,7 @@ export const APP_MESSAGE = {
   passwordResetEmail:
     "If an account exists with this email, you will receive a reset link.",
   passwordResetSuccessful: "Password successfully reset.",
+  userNotFound: "User not found.",
 
   skillSaved: "Skill added successfully.",
   skillNotFound: "Skill not found.",
@@ -71,4 +72,7 @@ export const APP_MESSAGE = {
   resourceNotFound: "Resource not found.",
   resourceDeleted: "Resource deleted successfully.",
   resourceEdited: "Resource edited successfully.",
+
+  goalSaved: "Goal added successfully.",
+  goalNotFound: "Goal not found.",
 };
