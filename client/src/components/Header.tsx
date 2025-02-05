@@ -23,7 +23,7 @@ const navigation = [
   { name: "Reports", to: "#" },
 ];
 const userNavigation = [
-  { name: "Your Profile", to: "#" },
+  { name: "Your Profile", to: "/profile" },
   { name: "Settings", to: "#" },
   { name: "Sign out", to: "#" },
 ];

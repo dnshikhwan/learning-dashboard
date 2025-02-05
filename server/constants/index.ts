@@ -55,6 +55,7 @@ export const APP_MESSAGE = {
   invalidToken: "Invalid or expired token.",
   userUnauthorized:
     "User is not authorized. Please log in to access this resources.",
+  usernameEdited: "Username edited successfully.",
 
   userLoggedIn: "User successfully logged in.",
   userRegistered: "User successfully registered.",

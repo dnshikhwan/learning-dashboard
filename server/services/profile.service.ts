@@ -34,3 +34,51 @@ export const getCurrentUserProfile = async (
     next(err);
   }
 };
+
+export const editUsername = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { username } = req.body;
+    const user = req.user as IUser;
+
+    if (!username) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.BAD_REQUEST,
+        APP_MESSAGE.missingRequiredField
+      );
+    }
+
+    const duplicatedUsername = await client.query(
+      "select * from users where username = $1",
+      [username]
+    );
+
+    if (duplicatedUsername.rows.length !== 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.CONFLICT,
+        APP_MESSAGE.usernameDuplicated
+      );
+    }
+
+    await client.query("update users set username = $1 where id = $2", [
+      username,
+      user.id,
+    ]);
+
+    return sendResponse(
+      res,
+      true,
+      HTTP_RESPONSE_CODE.OK,
+      APP_MESSAGE.usernameEdited
+    );
+  } catch (err) {
+    next(err);
+  }
+};

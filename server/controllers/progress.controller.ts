@@ -15,10 +15,10 @@ export const progressController = () => {
 
   router.post("/", authMiddleware, addProgress);
   router.get("/", authMiddleware, getProgress);
+  router.get("/time-spent", authMiddleware, getTimeSpent);
   router.get("/:id", authMiddleware, getProgressById);
   router.delete("/:id", authMiddleware, deleteProgress);
   router.put("/:id", authMiddleware, editProgress);
-  router.get("/time-spent", authMiddleware, getTimeSpent);
   router.get("/skill/:id", authMiddleware, getProgressBySkill);
 
   return router;

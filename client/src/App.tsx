@@ -17,6 +17,7 @@ import AddGoal from "./pages/goals/AddGoal";
 import EditGoal from "./pages/goals/EditGoal";
 import AddProgress from "./pages/progress/AddProgress";
 import EditProgress from "./pages/progress/EditProgress";
+import Profile from "./pages/profile/Profile";
 
 const App = () => {
   return (
@@ -49,6 +50,8 @@ const App = () => {
 
         <Route path="/progress/add/:id" element={<AddProgress />} />
         <Route path="/progress/edit/:id" element={<EditProgress />} />
+
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );
