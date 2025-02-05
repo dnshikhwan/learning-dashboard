@@ -4,7 +4,6 @@ import { sendResponse } from "../helpers/response.helper";
 import { APP_MESSAGE, HTTP_RESPONSE_CODE } from "../constants";
 import { client } from "../helpers/pg.helper";
 
-// TODO: add progress
 export const addProgress = async (
   req: Request,
   res: Response,
@@ -44,13 +43,136 @@ export const addProgress = async (
   }
 };
 
-// TODO: edit progress
+export const editProgress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user as IUser;
+    const { id } = req.params;
+    const { skill_id, time_spent, notes } = req.body;
 
-// TODO: delete progress
+    if (!skill_id || !time_spent) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.BAD_REQUEST,
+        APP_MESSAGE.missingRequiredField
+      );
+    }
 
-// TODO: get progress
+    await client.query(
+      "update progress set skill_id = $1, time_spent = $2, notes = $3 where id = $4 and user_id = $5",
+      [skill_id, time_spent, notes, id, user.id]
+    );
 
-// TODO: get total time
+    return sendResponse(
+      res,
+      true,
+      HTTP_RESPONSE_CODE.OK,
+      APP_MESSAGE.progressEdited
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const deleteProgress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+
+    const progress = await client.query(
+      "select * from progress where id = $1 and user_id = $2",
+      [id, user.id]
+    );
+
+    if (progress.rows.length === 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.NOT_FOUND,
+        APP_MESSAGE.progressNotFound
+      );
+    }
+
+    await client.query("delete from progress where id = $1 and user_id = $2", [
+      id,
+      user.id,
+    ]);
+
+    return sendResponse(
+      res,
+      true,
+      HTTP_RESPONSE_CODE.OK,
+      APP_MESSAGE.progressDeleted
+    );
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getProgress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user as IUser;
+
+    const progress = await client.query(
+      "select * from progress where user_id = $1",
+      [user.id]
+    );
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        progress: progress.rows,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getProgressBySkill = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+
+    const progress = await client.query(
+      "select * from progress where skill_id = $1 and user_id = $2",
+      [id, user.id]
+    );
+
+    if (progress.rows.length === 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.NOT_FOUND,
+        APP_MESSAGE.progressNotFound
+      );
+    }
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        progress: progress.rows,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const getTimeSpent = async (
   req: Request,
   res: Response,

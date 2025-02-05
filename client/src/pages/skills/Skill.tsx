@@ -9,11 +9,14 @@ import { differenceInDays, format } from "date-fns";
 import { IResource } from "../../interfaces/resource.interface";
 import { LinkIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { IGoal } from "../../interfaces/goal.interface";
+import { IProgress } from "../../interfaces/progress.interface";
 
 const Skill = () => {
   const [skill, setSkill] = useState<ISkills | undefined>();
   const [resources, setResources] = useState<IResource[]>([]);
   const [goals, setGoals] = useState<IGoal[]>([]);
+  const [progress, setProgress] = useState<IProgress[]>([]);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -66,6 +69,23 @@ const Skill = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        const response = await axiosConfig.get(`/progress/skill/${id}`);
+        setProgress(response.data.details.data.progress);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data.message);
+          console.log(err.response?.data);
+          setProgress([]);
+        }
+      }
+    };
+
+    fetchProgress();
+  }, [id]);
 
   const daysRemaining = skill?.target_date
     ? differenceInDays(new Date(skill.target_date), new Date())
@@ -169,6 +189,31 @@ const Skill = () => {
                       >
                         {resource.url}
                       </a>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-10 max-w-2xl">
+              <div className="flex justify-between items-center	">
+                <p className="font-semibold">Progress logs</p>
+                <Link to={"/resources/add"} className="text-indigo-600">
+                  Add progress log
+                </Link>
+              </div>
+              <ul role="list" className="mt-2 max-w-xl space-y-8 text-gray-600">
+                {progress.map((prog) => (
+                  <li key={prog.id} className="flex-col gap-x-3">
+                    <p className="text-gray-600">
+                      {format(new Date(prog.date), "dd/MM/yyyy")}
+                    </p>
+                    <p className="text-indigo-600">
+                      Time spent : {prog.time_spent} minutes
+                    </p>
+                    <span>
+                      <strong className="font-semibold text-gray-900">
+                        {prog.notes}
+                      </strong>
                     </span>
                   </li>
                 ))}

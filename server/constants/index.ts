@@ -79,4 +79,7 @@ export const APP_MESSAGE = {
   goalEdited: "Goal edited successfully.",
 
   progressSaved: "Progress added successfully.",
+  progressNotFound: "Progress not found.",
+  progressDeleted: "Progress deleted successfully.",
+  progressEdited: "Progress edited successfully.",
 };
