@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { axiosConfig } from "../../axiosConfig";
 import { differenceInDays, format } from "date-fns";
 import { IResource } from "../../interfaces/resource.interface";
-import { LinkIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { LinkIcon, MinusIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { IGoal } from "../../interfaces/goal.interface";
 import { IProgress } from "../../interfaces/progress.interface";
 
@@ -86,6 +86,26 @@ const Skill = () => {
 
     fetchProgress();
   }, [id]);
+
+  const handleDeleteProgress = async (e: React.FormEvent, id: number) => {
+    e.preventDefault();
+
+    try {
+      const response = await axiosConfig.delete(`/progress/${id}`);
+      console.log(response.data);
+      toast.success(response.data.message);
+      setProgress(
+        progress.filter((prog) => {
+          return prog.id !== id;
+        })
+      );
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        toast.error(err.response?.data.message);
+        console.log(err.response?.data);
+      }
+    }
+  };
 
   const daysRemaining = skill?.target_date
     ? differenceInDays(new Date(skill.target_date), new Date())
@@ -197,16 +217,37 @@ const Skill = () => {
             <div className="mt-10 max-w-2xl">
               <div className="flex justify-between items-center	">
                 <p className="font-semibold">Progress logs</p>
-                <Link to={"/resources/add"} className="text-indigo-600">
+                <Link
+                  to={`/progress/add/${skill?.id}`}
+                  className="text-indigo-600"
+                >
                   Add progress log
                 </Link>
               </div>
               <ul role="list" className="mt-2 max-w-xl space-y-8 text-gray-600">
                 {progress.map((prog) => (
                   <li key={prog.id} className="flex-col gap-x-3">
-                    <p className="text-gray-600">
-                      {format(new Date(prog.date), "dd/MM/yyyy")}
-                    </p>
+                    <div className="flex gap-2">
+                      <MinusIcon
+                        aria-hidden="true"
+                        className="mt-1 size-5 flex-none text-black"
+                      />
+                      <p className="text-gray-600">
+                        {format(new Date(prog.date), "dd/MM/yyyy")}
+                      </p>
+                      <Link
+                        to={`/progress/edit/${prog.id}`}
+                        className="text-indigo-600"
+                      >
+                        Edit
+                      </Link>
+                      <button
+                        onClick={(e) => handleDeleteProgress(e, prog.id)}
+                        className="text-red-600 hover:cursor-pointer"
+                      >
+                        Delete
+                      </button>
+                    </div>
                     <p className="text-indigo-600">
                       Time spent : {prog.time_spent} minutes
                     </p>

@@ -11,7 +11,7 @@ export const addProgress = async (
 ) => {
   try {
     const user = req.user as IUser;
-    const { skill_id, time_spent, notes } = req.body;
+    const { skill_id, time_spent, notes, date } = req.body;
 
     if (!skill_id || !time_spent) {
       return sendResponse(
@@ -22,10 +22,18 @@ export const addProgress = async (
       );
     }
 
-    const newProgress = await client.query(
-      "insert into progress (skill_id, user_id, time_spent, notes) values ($1, $2, $3, $4) returning * ",
-      [skill_id, user.id, time_spent, notes]
-    );
+    let newProgress;
+    if (date) {
+      newProgress = await client.query(
+        "insert into progress (skill_id, user_id, time_spent, notes, date) values ($1, $2, $3, $4, $5) returning * ",
+        [skill_id, user.id, time_spent, notes, date]
+      );
+    } else {
+      newProgress = await client.query(
+        "insert into progress (skill_id, user_id, time_spent, notes) values ($1, $2, $3, $4) returning * ",
+        [skill_id, user.id, time_spent, notes]
+      );
+    }
 
     return sendResponse(
       res,
@@ -51,9 +59,9 @@ export const editProgress = async (
   try {
     const user = req.user as IUser;
     const { id } = req.params;
-    const { skill_id, time_spent, notes } = req.body;
+    const { time_spent, notes } = req.body;
 
-    if (!skill_id || !time_spent) {
+    if (!time_spent) {
       return sendResponse(
         res,
         false,
@@ -63,8 +71,8 @@ export const editProgress = async (
     }
 
     await client.query(
-      "update progress set skill_id = $1, time_spent = $2, notes = $3 where id = $4 and user_id = $5",
-      [skill_id, time_spent, notes, id, user.id]
+      "update progress set time_spent = $1, notes = $2 where id = $3 and user_id = $4",
+      [time_spent, notes, id, user.id]
     );
 
     return sendResponse(
@@ -129,6 +137,39 @@ export const getProgress = async (
       "select * from progress where user_id = $1",
       [user.id]
     );
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        progress: progress.rows,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getProgressById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { id } = req.params;
+    const user = req.user as IUser;
+
+    const progress = await client.query(
+      "select * from progress where id = $1 and user_id = $2",
+      [id, user.id]
+    );
+
+    if (progress.rows.length === 0) {
+      return sendResponse(
+        res,
+        false,
+        HTTP_RESPONSE_CODE.NOT_FOUND,
+        APP_MESSAGE.progressNotFound
+      );
+    }
 
     return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
       data: {

@@ -15,6 +15,8 @@ import AddResource from "./pages/resources/AddResource";
 import EditResource from "./pages/resources/EditResource";
 import AddGoal from "./pages/goals/AddGoal";
 import EditGoal from "./pages/goals/EditGoal";
+import AddProgress from "./pages/progress/AddProgress";
+import EditProgress from "./pages/progress/EditProgress";
 
 const App = () => {
   return (
@@ -44,6 +46,9 @@ const App = () => {
 
         <Route path="/goals/add" element={<AddGoal />} />
         <Route path="/goals/edit/:id" element={<EditGoal />} />
+
+        <Route path="/progress/add/:id" element={<AddProgress />} />
+        <Route path="/progress/edit/:id" element={<EditProgress />} />
       </Routes>
     </>
   );
