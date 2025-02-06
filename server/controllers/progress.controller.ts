@@ -8,6 +8,7 @@ import {
   getProgressById,
   getProgressBySkill,
   getTimeSpent,
+  getTimeSpentPerDay,
 } from "../services/progress.service";
 
 export const progressController = () => {
@@ -16,6 +17,7 @@ export const progressController = () => {
   router.post("/", authMiddleware, addProgress);
   router.get("/", authMiddleware, getProgress);
   router.get("/time-spent", authMiddleware, getTimeSpent);
+  router.get("/per-day", authMiddleware, getTimeSpentPerDay);
   router.get("/:id", authMiddleware, getProgressById);
   router.delete("/:id", authMiddleware, deleteProgress);
   router.put("/:id", authMiddleware, editProgress);

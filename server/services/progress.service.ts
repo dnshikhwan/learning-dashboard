@@ -59,9 +59,9 @@ export const editProgress = async (
   try {
     const user = req.user as IUser;
     const { id } = req.params;
-    const { time_spent, notes } = req.body;
+    const { date, time_spent, notes } = req.body;
 
-    if (!time_spent) {
+    if (!time_spent || !date) {
       return sendResponse(
         res,
         false,
@@ -71,8 +71,8 @@ export const editProgress = async (
     }
 
     await client.query(
-      "update progress set time_spent = $1, notes = $2 where id = $3 and user_id = $4",
-      [time_spent, notes, id, user.id]
+      "update progress set time_spent = $1, notes = $2, date = $3 where id = $4 and user_id = $5",
+      [time_spent, notes, date, id, user.id]
     );
 
     return sendResponse(
@@ -236,6 +236,56 @@ export const getTimeSpent = async (
     return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
       data: {
         total_time_spent,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getTimeSpentPerDay = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = req.user as IUser;
+
+    const progress = await client.query(
+      `WITH date_series AS (
+        SELECT generate_series(
+          CURRENT_DATE - INTERVAL '6 days',
+          CURRENT_DATE,
+          '1 day'::interval
+        )::date AS date
+      )
+      SELECT 
+        date_series.date,
+        COALESCE(SUM(p.time_spent), 0) as total_time
+      FROM date_series
+      LEFT JOIN progress p ON date_series.date = p.date AND p.user_id = $1
+      GROUP BY date_series.date
+      ORDER BY date_series.date`,
+      [user.id]
+    );
+
+    const data = progress.rows.map((row) => {
+      return Number(row.total_time);
+    });
+
+    const dates = progress.rows.map((row) => {
+      return row.date;
+    });
+
+    const formattedData = {
+      name: "Time spent learning per day",
+      data,
+      dates,
+    };
+
+    return sendResponse(res, true, HTTP_RESPONSE_CODE.OK, APP_MESSAGE.success, {
+      data: {
+        data: [formattedData],
       },
     });
   } catch (err) {
