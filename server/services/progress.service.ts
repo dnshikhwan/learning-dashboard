@@ -3,6 +3,7 @@ import { IUser } from "../interfaces/user.interface";
 import { sendResponse } from "../helpers/response.helper";
 import { APP_MESSAGE, HTTP_RESPONSE_CODE } from "../constants";
 import { client } from "../helpers/pg.helper";
+import { updateCredit } from "./credit.service";
 
 export const addProgress = async (
   req: Request,
@@ -34,6 +35,8 @@ export const addProgress = async (
         [skill_id, user.id, time_spent, notes]
       );
     }
+
+    await updateCredit(req, res, next);
 
     return sendResponse(
       res,
