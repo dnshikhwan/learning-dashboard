@@ -86,4 +86,6 @@ export const APP_MESSAGE = {
 
   insufficientCredit: "Insufficient credit.",
   rewardsClaimed: "Reward successfully claimed.",
+
+  streakUpdated: "Streak successfully updated.",
 };

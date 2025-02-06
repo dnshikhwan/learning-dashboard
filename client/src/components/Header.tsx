@@ -8,7 +8,7 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { AxiosError } from "axios";
+import { Axios, AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useLocation } from "react-router";
@@ -45,6 +45,7 @@ const Header = () => {
   });
 
   const [credit, setCredit] = useState(localStorage.getItem("credit"));
+  const [streak, setStreak] = useState(localStorage.getItem("streaks"));
 
   useEffect(() => {
     const fetchCredit = async () => {
@@ -63,6 +64,24 @@ const Header = () => {
 
     fetchCredit();
   }, []);
+
+  useEffect(() => {
+    const fetchStreak = async () => {
+      try {
+        const response = await axiosConfig.get("/streaks");
+        const current_streak = response.data.details.data.current_streak;
+        localStorage.setItem("current_streak", current_streak);
+        setStreak(current_streak);
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          toast.error(err.response?.data.message);
+          console.log(err.response?.data);
+        }
+      }
+    };
+
+    fetchStreak();
+  });
 
   return (
     <div className="bg-gray-800 pb-32">
@@ -99,6 +118,9 @@ const Header = () => {
               </div>
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center md:ml-6">
+                  <p className="mr-4 text-gray-300 font-medium">
+                    Streaks : {streak}
+                  </p>
                   <p className="mr-4 text-gray-300 font-medium">
                     Credits : {credit}
                   </p>

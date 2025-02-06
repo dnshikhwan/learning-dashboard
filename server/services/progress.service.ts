@@ -4,6 +4,7 @@ import { sendResponse } from "../helpers/response.helper";
 import { APP_MESSAGE, HTTP_RESPONSE_CODE } from "../constants";
 import { client } from "../helpers/pg.helper";
 import { updateCredit } from "./credit.service";
+import { updateStreak } from "./streak.service";
 
 export const addProgress = async (
   req: Request,
@@ -37,6 +38,7 @@ export const addProgress = async (
     }
 
     await updateCredit(req, res, next);
+    await updateStreak(req, res, next);
 
     return sendResponse(
       res,
