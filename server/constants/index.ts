@@ -83,4 +83,7 @@ export const APP_MESSAGE = {
   progressNotFound: "Progress not found.",
   progressDeleted: "Progress deleted successfully.",
   progressEdited: "Progress edited successfully.",
+
+  insufficientCredit: "Insufficient credit.",
+  rewardsClaimed: "Reward successfully claimed.",
 };

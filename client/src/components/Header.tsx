@@ -25,7 +25,7 @@ const navigation = [
   { name: "Skills", to: "/skills" },
   { name: "Resources", to: "/resources" },
   { name: "Reports", to: "/reports" },
-  { name: "Rewards", to: "" },
+  { name: "Rewards", to: "/rewards" },
 ];
 const userNavigation = [
   { name: "Your Profile", to: "/profile" },

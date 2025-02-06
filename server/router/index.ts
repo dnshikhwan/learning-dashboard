@@ -7,6 +7,7 @@ import { profileController } from "../controllers/profile.controller";
 import { goalController } from "../controllers/goal.controller";
 import { progressController } from "../controllers/progress.controller";
 import { creditController } from "../controllers/credit.controller";
+import { rewardController } from "../controllers/reward.controller";
 
 export const createRouter = () => {
   const router = Router();
@@ -19,6 +20,7 @@ export const createRouter = () => {
   router.use("/goals", goalController());
   router.use("/progress", progressController());
   router.use("/credits", creditController());
+  router.use("/rewards", rewardController());
 
   return router;
 };

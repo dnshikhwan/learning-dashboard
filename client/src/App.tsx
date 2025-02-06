@@ -19,6 +19,7 @@ import AddProgress from "./pages/progress/AddProgress";
 import EditProgress from "./pages/progress/EditProgress";
 import Profile from "./pages/profile/Profile";
 import Reports from "./pages/reports/Reports";
+import Reward from "./pages/rewards/Reward";
 
 const App = () => {
   return (
@@ -55,6 +56,8 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
 
         <Route path="/reports" element={<Reports />} />
+
+        <Route path="/rewards" element={<Reward />} />
       </Routes>
     </>
   );
