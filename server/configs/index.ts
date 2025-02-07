@@ -26,5 +26,8 @@ export const cookieOptions = {
     process.env.NODE_ENV === "production"
       ? ("none" as const)
       : ("lax" as const),
-  domain: process.env.NODE_ENV === "production" ? ".domain.com" : "localhost",
+  domain:
+    process.env.NODE_ENV === "production"
+      ? process.env.BACKEND_BASE_DOMAIN
+      : "localhost",
 };

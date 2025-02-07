@@ -70,6 +70,11 @@ export const signUp = async (
       [username, email, hashedPassword]
     );
 
+    await client.query(
+      "insert into credits (user_id, credit) values ($1, $2)",
+      [newUser.rows[0].id, 0]
+    );
+
     return sendResponse(
       res,
       true,
