@@ -1,7 +1,12 @@
 import axios, { AxiosError } from "axios";
 
+const baseURL =
+  import.meta.env.MODE === "production"
+    ? import.meta.env.VITE_BACKEND_URL
+    : "http://localhost:5000/api";
+
 export const axiosConfig = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL,
   timeout: 10000,
   withCredentials: true,
 });
